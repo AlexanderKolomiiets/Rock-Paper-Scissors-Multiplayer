@@ -1,0 +1,7 @@
+{
+  "extends": "@mate-academy/students-ts-config",
+  "include": ["src", "server.ts", "utils", "types"],
+  "compilerOptions": {
+    "module": "CommonJS"
+  }
+}

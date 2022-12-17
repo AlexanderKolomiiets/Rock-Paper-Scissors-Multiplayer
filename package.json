@@ -1,21 +1,35 @@
 {
   "name": "rock-paper-scissors",
   "version": "0.1.0",
+  "homepage": "https://alexanderkolomiiets.github.io/paper-rock-scissors-multiplayer",
   "private": true,
   "dependencies": {
+    "@mate-academy/students-ts-config": "0.0.4",
+    "@mate-academy/stylelint-config": "0.0.9",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-helmet": "^6.1.0",
     "react-scripts": "5.0.1",
+    "socket.io": "^4.5.4",
+    "socket.io-client": "^4.5.4",
+    "typescript": "^4.9.4",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "server": "nodemon server.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +48,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@mate-academy/eslint-config-react-typescript": "^1.0.11",
+    "@types/react-helmet": "^6.1.6",
+    "@types/socket.io": "^3.0.2",
+    "gh-pages": "^4.0.0",
+    "nodemon": "^2.0.20",
+    "typescript-plugin-css-modules": "^4.1.1"
   }
 }
