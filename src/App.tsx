@@ -1,5 +1,6 @@
-import './App.scss';
 import { io } from 'socket.io-client';
+import './App.scss';
+import Menu from './components/Menu';
 
 const socket = io(
   'http://localhost:3001',
@@ -8,8 +9,8 @@ const socket = io(
 function App() {
   return (
     <div className="App">
-      <h1>hello</h1>
-      <h1>{socket.id}</h1>
+      <Menu />
+      {socket.id}
     </div>
   );
 }

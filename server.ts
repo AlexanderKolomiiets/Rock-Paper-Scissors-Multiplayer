@@ -92,19 +92,7 @@ io.on('connection', (socket) => {
       const playerTwoChoice = choices[roomId][1];
 
       if (playerOneChoice === playerTwoChoice) {
-        const message = `Both of you chose ${playerOneChoice}. So it's draw`;
-
-        io.to(roomId).emit('draw', message);
-      } else if (winCombinations[playerOneChoice] === playerTwoChoice) {
-        let enemyChoice = '';
-
-        if (playerId === 1) {
-          enemyChoice = playerTwoChoice;
-        } else {
-          enemyChoice = playerOneChoice;
-        }
-
-        io.to(roomId).emit('player_1_wins', { playerChoice, enemyChoice });
+        io.to(roomId).emit('draw', 'It`s draw');
       } else {
         let enemyChoice = '';
 
@@ -114,10 +102,44 @@ io.on('connection', (socket) => {
           enemyChoice = playerOneChoice;
         }
 
-        io.to(roomId).emit('player_2_wins', { playerChoice, enemyChoice });
+        if (winCombinations[playerOneChoice] === playerTwoChoice) {
+          io.to(roomId).emit('player_1_wins', { playerChoice, enemyChoice });
+        } else {
+          io.to(roomId).emit('player_2_wins', { playerChoice, enemyChoice });
+        }
       }
 
       choices[roomId] = ['', ''];
+    }
+  });
+
+  socket.on('disconnect', () => {
+    if (connectedUsers[socket.id]) {
+      let player;
+      let roomId;
+
+      for (const id in rooms) {
+        if (rooms[id].includes(socket.id)) {
+          if (rooms[id][0] === socket.id) {
+            player = 1;
+          } else {
+            player = 2;
+          }
+
+          roomId = id;
+          break;
+        }
+      }
+
+      if (player && roomId) {
+        exitRoom(roomId, player);
+
+        if (player === 1) {
+          io.to(roomId).emit('player_1_disconnected');
+        } else {
+          io.to(roomId).emit('player_2_disconnected');
+        }
+      }
     }
   });
 });
