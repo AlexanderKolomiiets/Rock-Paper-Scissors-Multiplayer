@@ -86,6 +86,39 @@ io.on('connection', (socket) => {
 
   socket.on('turn', ({ playerId, playerChoice, roomId }) => {
     makeMove(roomId, playerId, playerChoice);
+
+    if (choices[roomId][0] !== '' && choices[roomId][1] !== '') {
+      const playerOneChoice = choices[roomId][0];
+      const playerTwoChoice = choices[roomId][1];
+
+      if (playerOneChoice === playerTwoChoice) {
+        const message = `Both of you chose ${playerOneChoice}. So it's draw`;
+
+        io.to(roomId).emit('draw', message);
+      } else if (winCombinations[playerOneChoice] === playerTwoChoice) {
+        let enemyChoice = '';
+
+        if (playerId === 1) {
+          enemyChoice = playerTwoChoice;
+        } else {
+          enemyChoice = playerOneChoice;
+        }
+
+        io.to(roomId).emit('player_1_wins', { playerChoice, enemyChoice });
+      } else {
+        let enemyChoice = '';
+
+        if (playerId === 1) {
+          enemyChoice = playerTwoChoice;
+        } else {
+          enemyChoice = playerOneChoice;
+        }
+
+        io.to(roomId).emit('player_2_wins', { playerChoice, enemyChoice });
+      }
+
+      choices[roomId] = ['', ''];
+    }
   });
 });
 
