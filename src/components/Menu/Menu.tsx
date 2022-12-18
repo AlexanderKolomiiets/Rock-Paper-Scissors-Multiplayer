@@ -1,8 +1,11 @@
 import 'bulma/css/bulma.min.css';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Menu: React.FC = () => {
   const [selected, setSelected] = useState<string | null>(null);
+
+  const navigate = useNavigate();
 
   const handleSelect = (section: string | null) => {
     setSelected(section);
@@ -23,7 +26,7 @@ export const Menu: React.FC = () => {
           <button
             type="submit"
             className="button is-primary"
-            onClick={() => handleSelect('create')}
+            onClick={() => navigate('/game')}
           >
             Create Room
           </button>

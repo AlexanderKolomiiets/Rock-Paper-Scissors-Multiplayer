@@ -6,3 +6,24 @@
 .choice:hover {
   transform: scale(1.05);
 }
+
+.dot {
+  padding-left: 20px;
+  position: relative;
+}
+
+.dot:before {
+  position: absolute;
+  left: 0;
+  bottom: 25%;
+  content: '';
+  background-color:#ff0000;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  pointer-events: none;
+}
+
+.connected:before {
+  background-color:#00cc00;
+}

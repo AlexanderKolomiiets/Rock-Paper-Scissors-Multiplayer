@@ -1,10 +1,16 @@
 import 'bulma/css/bulma.min.css';
 import './Game.scss';
+import classNames from 'classnames';
 import rock from '../../images/rock.png';
 import paper from '../../images/paper.png';
 import scissors from '../../images/scissors.png';
 
-export const Game: React.FC = () => {
+type Props = {
+  playerId: number,
+  playerStatus: number,
+};
+
+export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
   return (
     <div
       style={{
@@ -27,20 +33,33 @@ export const Game: React.FC = () => {
         }}
       >
         <div className="player">
-          <span className="dot" />
-          <span className="subtitle" id="player-1-tag">You (Player 1)</span>
+          <span className={classNames(
+            'dot',
+            { connected: playerStatus === 1 },
+          )}
+          />
+          <span className="subtitle" id="player-1-tag">
+            {playerId === 1
+              ? 'You (Player 1)'
+              : 'Enemy (Player 2)'}
+          </span>
         </div>
 
         <div className="player">
-          <span className="dot" />
-          <span className="subtitle" id="player-2-tag">Enemy (Player 2)</span>
+          <span className={classNames(
+            'dot',
+            { connected: playerStatus === 2 },
+          )}
+          />
+          <span className="subtitle" id="player-2-tag">
+            {playerId === 1
+              ? 'Enemy (Player 2)'
+              : 'You (Player 1)'}
+          </span>
         </div>
       </div>
 
-      <div
-        className="choices block"
-        style={{ display: 'flex', gap: '20px' }}
-      >
+      <div className="choices block" style={{ display: 'flex', gap: '20px' }}>
         <div className="choice">
           <img src={rock} alt="rock" />
         </div>
@@ -54,9 +73,7 @@ export const Game: React.FC = () => {
         </div>
       </div>
 
-      <div
-        style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}
-      >
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
         <span className="tag is-link is-normal">
           You:
           <span id="my-score" style={{ marginLeft: '5px' }}>
