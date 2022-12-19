@@ -1,10 +1,10 @@
 export const rooms: any = {};
 
-export const createRoom = (roomId: number, playerId: string) => {
+export const createRoom = (roomId: string, playerId: string) => {
   rooms[roomId] = [playerId, ''];
 };
 
-export const joinRoom = (roomId: number, player2Id: string) => {
+export const joinRoom = (roomId: string, player2Id: string) => {
   rooms[roomId][1] = player2Id;
 };
 

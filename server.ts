@@ -74,13 +74,13 @@ io.on('connection', (socket) => {
       socket.emit('show_error', Error.Full);
     } else {
       userConnected(socket.id);
-      joinRoom(+roomId, socket.id);
+      joinRoom(roomId, socket.id);
       socket.join(roomId);
 
       socket.emit('room_joined', roomId);
       socket.emit('player_2_connected');
       socket.broadcast.to(roomId).emit('player_2_connected');
-      initializeChoices(+roomId);
+      initializeChoices(roomId);
     }
   });
 
@@ -145,6 +145,7 @@ io.on('connection', (socket) => {
 });
 
 server.listen(`${PORT}`, () => {
+  // eslint-disable-next-line no-console
   console.log(`Server started on port: ${PORT}`);
 });
 

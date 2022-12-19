@@ -1,20 +1,51 @@
 import 'bulma/css/bulma.min.css';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import classNames from 'classnames';
+import { Error } from '../../../types/Error';
 
-export const Menu: React.FC = () => {
+type Props = {
+  error: Error | null;
+  handleCreateRoom: (value: string) => void;
+  handleJoinRoom: (value: string) => void;
+  handleJoinRandomRoom: () => void;
+};
+
+export const Menu: React.FC<Props> = ({
+  error,
+  handleCreateRoom,
+  handleJoinRoom,
+  handleJoinRandomRoom,
+}) => {
   const [selected, setSelected] = useState<string | null>(null);
-
-  const navigate = useNavigate();
+  const [createInput, setCreateInput] = useState('');
+  const [joinInput, setJoinInput] = useState('');
 
   const handleSelect = (section: string | null) => {
     setSelected(section);
+  };
+
+  const handleCreateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCreateInput(event.target.value);
+  };
+
+  const handleJoinInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setJoinInput(event.target.value);
   };
 
   const buttonLayoutStyles = {
     display: 'flex',
     gap: '30px',
     justifyContent: 'center',
+  };
+
+  const errorStyles = {
+    width: '300px',
+    margin: '0 auto',
+    marginTop: '40px',
+    display: 'block',
+    background: '#cc0000',
+    color: 'white',
+    padding: '10px',
   };
 
   return (
@@ -26,7 +57,7 @@ export const Menu: React.FC = () => {
           <button
             type="submit"
             className="button is-primary"
-            onClick={() => navigate('/game')}
+            onClick={() => handleSelect('create')}
           >
             Create Room
           </button>
@@ -47,9 +78,18 @@ export const Menu: React.FC = () => {
             placeholder="Enter a name of the room"
             className="input"
             style={{ marginBottom: '30px' }}
+            value={createInput}
+            onChange={handleCreateInput}
           />
           <div style={buttonLayoutStyles}>
-            <button type="submit" className="button is-primary">
+            <button
+              type="submit"
+              className="button is-primary"
+              onClick={() => {
+                handleCreateRoom(createInput);
+                setCreateInput('');
+              }}
+            >
               Create
             </button>
 
@@ -70,9 +110,18 @@ export const Menu: React.FC = () => {
             type="text"
             className="input"
             placeholder="Enter a name of the room"
+            value={joinInput}
+            onChange={handleJoinInput}
           />
           <div style={buttonLayoutStyles}>
-            <button type="submit" className="button is-primary">
+            <button
+              type="submit"
+              className="button is-primary"
+              onClick={() => {
+                handleJoinRoom(joinInput);
+                setJoinInput('');
+              }}
+            >
               Join
             </button>
 
@@ -85,13 +134,22 @@ export const Menu: React.FC = () => {
             </button>
           </div>
 
-          <button type="submit" className="button is-primary">
+          <button
+            type="submit"
+            className="button is-primary"
+            onClick={() => handleJoinRandomRoom()}
+          >
             Join Random
           </button>
         </div>
       )}
 
-      <div className="error-message" id="error-message" />
+      <p
+        className={classNames('error', { 'is-hidden': !error })}
+        style={errorStyles}
+      >
+        {error}
+      </p>
     </div>
   );
 };

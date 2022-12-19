@@ -7,10 +7,21 @@ import scissors from '../../images/scissors.png';
 
 type Props = {
   playerId: number,
-  playerStatus: number,
+  playerOneStatus: boolean,
+  playerTwoStatus: boolean,
+  waiting: boolean,
+  playerScore: number,
+  enemyScore: number
 };
 
-export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
+export const Game: React.FC<Props> = ({
+  playerId,
+  playerOneStatus,
+  playerTwoStatus,
+  waiting,
+  playerScore,
+  enemyScore,
+}) => {
   return (
     <div
       style={{
@@ -20,7 +31,11 @@ export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
         gap: '20px',
       }}
     >
-      <div className="title">
+      <div className={classNames(
+        'title',
+        { 'is-hidden': !waiting },
+      )}
+      >
         <p>Waiting for another player to join...</p>
       </div>
 
@@ -35,7 +50,7 @@ export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
         <div className="player">
           <span className={classNames(
             'dot',
-            { connected: playerStatus === 1 },
+            { connected: playerOneStatus },
           )}
           />
           <span className="subtitle" id="player-1-tag">
@@ -48,7 +63,7 @@ export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
         <div className="player">
           <span className={classNames(
             'dot',
-            { connected: playerStatus === 2 },
+            { connected: playerTwoStatus },
           )}
           />
           <span className="subtitle" id="player-2-tag">
@@ -77,13 +92,13 @@ export const Game: React.FC<Props> = ({ playerId, playerStatus }) => {
         <span className="tag is-link is-normal">
           You:
           <span id="my-score" style={{ marginLeft: '5px' }}>
-            0
+            {playerScore}
           </span>
         </span>
         <span className="tag is-link is-normal">
           Enemy:
           <span id="enemy-score" style={{ marginLeft: '5px' }}>
-            0
+            {enemyScore}
           </span>
         </span>
       </div>
