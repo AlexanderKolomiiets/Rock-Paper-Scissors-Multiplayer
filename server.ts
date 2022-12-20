@@ -84,7 +84,7 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('turn', ({ playerId, playerChoice, roomId }) => {
+  socket.on('choose', ({ playerId, playerChoice, roomId }) => {
     makeMove(roomId, playerId, playerChoice);
 
     if (choices[roomId][0] !== '' && choices[roomId][1] !== '') {

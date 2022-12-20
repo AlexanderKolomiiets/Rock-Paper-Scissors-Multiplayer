@@ -1,5 +1,6 @@
 import 'bulma/css/bulma.min.css';
 import './Game.scss';
+import { Choice } from '../../../types/Choice';
 import classNames from 'classnames';
 import rock from '../../images/rock.png';
 import paper from '../../images/paper.png';
@@ -11,7 +12,10 @@ type Props = {
   playerTwoStatus: boolean,
   waiting: boolean,
   playerScore: number,
-  enemyScore: number
+  enemyScore: number,
+  winning: null | string,
+  choice: null | Choice,
+  handleChoice: (item: null | Choice) => void,
 };
 
 export const Game: React.FC<Props> = ({
@@ -21,6 +25,9 @@ export const Game: React.FC<Props> = ({
   waiting,
   playerScore,
   enemyScore,
+  winning,
+  choice,
+  handleChoice
 }) => {
   return (
     <div
@@ -75,15 +82,30 @@ export const Game: React.FC<Props> = ({
       </div>
 
       <div className="choices block" style={{ display: 'flex', gap: '20px' }}>
-        <div className="choice">
+        <div className={classNames(
+            'choice',
+            { selected: choice === 'rock' },
+          )}
+          onClick={() => handleChoice('rock')}
+        >
           <img src={rock} alt="rock" />
         </div>
 
-        <div className="choice">
+        <div className={classNames(
+            'choice',
+            { selected: choice === 'paper' },
+          )}
+          onClick={() => handleChoice('paper')}
+        >
           <img src={paper} alt="paper" />
         </div>
 
-        <div className="choice">
+        <div className={classNames(
+            'choice',
+            { selected: choice === 'scissors' },
+          )}
+          onClick={() => handleChoice('scissors')}
+        >
           <img src={scissors} alt="scissors" />
         </div>
       </div>
@@ -103,7 +125,13 @@ export const Game: React.FC<Props> = ({
         </span>
       </div>
 
-      <div className="message-after-choice-selection" />
+      <div className={classNames(
+        'title',
+        { 'is-hidden': !winning },
+      )}
+      >
+        <p>{winning}</p>
+      </div>
     </div>
   );
 };
