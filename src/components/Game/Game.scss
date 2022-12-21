@@ -27,3 +27,8 @@
 .connected:before {
   background-color:#00cc00;
 }
+
+.selected {
+  filter: drop-shadow(16px 16px 20px grey);
+}
+

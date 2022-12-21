@@ -91,6 +91,8 @@ io.on('connection', (socket) => {
       const playerOneChoice = choices[roomId][0];
       const playerTwoChoice = choices[roomId][1];
 
+      console.log(choices);
+
       if (playerOneChoice === playerTwoChoice) {
         io.to(roomId).emit('draw', 'It`s draw');
       } else {
