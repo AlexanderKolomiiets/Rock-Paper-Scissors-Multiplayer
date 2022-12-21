@@ -40,9 +40,9 @@ function App() {
   const handleChoice = (item: Choice) => {
     if (canChoose && playerOneStatus && playerTwoStatus) {
       setChoice(item);
-      socket.emit('choose', {playerId, choice, roomId})
+      socket.emit('choose', { playerId, choice, roomId });
     }
-  }
+  };
 
   const handleCreateRoom = (id: string) => {
     setError(null);
@@ -115,7 +115,7 @@ function App() {
       setWinning(message);
     });
 
-    socket.on('player_1_wins', ({playerChoice, enemyChoice}) => {
+    socket.on('player_1_wins', ({ playerChoice, enemyChoice }) => {
       if (playerId === 1) {
         setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you won )`);
         setPlayerScore(prev => prev + 1);
@@ -125,7 +125,7 @@ function App() {
       }
     });
 
-    socket.on('player_2_wins', ({playerChoice, enemyChoice}) => {
+    socket.on('player_2_wins', ({ playerChoice, enemyChoice }) => {
       if (playerId === 2) {
         setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you won )`);
         setPlayerScore(prev => prev + 1);
@@ -134,7 +134,6 @@ function App() {
         setEnemyScore(prev => prev + 1);
       }
     });
-
   }, []);
 
   return (
