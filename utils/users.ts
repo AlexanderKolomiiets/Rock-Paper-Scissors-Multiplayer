@@ -2,9 +2,9 @@
 export const connectedUsers: any = {};
 export const choices: any = {};
 export const winCombinations: any = {
-  'rock': 'scissor',
+  'rock': 'scissors',
   'paper': 'rock',
-  'scissor': 'paper',
+  'scissors': 'paper',
 };
 
 export const initializeChoices = (roomId: string) => {

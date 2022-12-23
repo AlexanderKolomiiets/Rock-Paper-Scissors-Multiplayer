@@ -27,7 +27,7 @@ function App() {
   const [canChoose, setCanChoose] = useState(false);
   const [playerScore, setPlayerScore] = useState(0);
   const [enemyScore, setEnemyScore] = useState(0);
-  const [firstPlayerWon, setFirstPlayerWon] = useState<null | boolean>(null);
+  const [firstPlayerWon, setFirstPlayerWon] = useState(false);
   const [error, setError] = useState<null | Error>(null);
 
   const navigate = useNavigate();
@@ -38,7 +38,6 @@ function App() {
 
       setChoice(item);
       socket.emit('choose', { playerId, playerChoice, roomId });
-      setCanChoose(false);
     }
   };
 
@@ -57,10 +56,9 @@ function App() {
     socket.emit('join_random_room');
   };
 
-  // const handleRestart = () => {
-  //   setWinning(null);
-  //   setCanChoose(true);
-  // };
+  const handleRestart = () => {
+    socket.emit('restart', roomId);
+  };
 
   useEffect(() => {
     socket.on('show_error', (err) => {
@@ -112,22 +110,35 @@ function App() {
       setWaiting(true);
       setPlayerScore(0);
       setEnemyScore(0);
+      setPlayerWinning('');
+      setEnemyWinning('');
     });
 
     socket.on('draw', (message: string) => {
       setPlayerWinning(message);
     });
 
-    socket.on('player_1_wins', ({ playerChoice, enemyChoice }) => {
+    socket.on('player_1_wins', ({ playerOneChoice, playerTwoChoice }) => {
       setFirstPlayerWon(true);
-      setPlayerWinning(`You chose ${playerChoice} and your opponent chose ${enemyChoice}, so you won1 )`);
-      setEnemyWinning(`You chose ${enemyChoice} and your opponent chose ${playerChoice}, so you lost1 (`);
+      setPlayerWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you won1 )`);
+      setEnemyWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you lost1 (`);
+      setPlayerScore(prev => prev + 1);
+      setCanChoose(false);
     });
 
-    socket.on('player_2_wins', ({ playerChoice, enemyChoice }) => {
+    socket.on('player_2_wins', ({ playerOneChoice, playerTwoChoice }) => {
       setFirstPlayerWon(false);
-      setPlayerWinning(`You chose ${playerChoice} and your opponent chose ${enemyChoice}, so you won2 )`);
-      setEnemyWinning(`You chose ${enemyChoice} and your opponent chose ${playerChoice}, so you lost2 (`);
+      setPlayerWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you won2 )`);
+      setEnemyWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you lost2 (`);
+      setEnemyScore(prev => prev + 1);
+      setCanChoose(false);
+    });
+
+    socket.on('restart', () => {
+      setPlayerWinning('');
+      setEnemyWinning('');
+      setChoice(null);
+      setCanChoose(true);
     });
   }, []);
 
@@ -161,11 +172,11 @@ function App() {
               firstPlayerWon={firstPlayerWon}
               choice={choice}
               handleChoice={handleChoice}
-              // handleRestart={handleRestart}
+              handleRestart={handleRestart}
             />
           )}
         />
-        <Route path="*" element={<h1>{playerId}</h1>} />
+        <Route path="*" element={<h1>Page not found</h1>} />
       </Routes>
     </div>
   );

@@ -16,10 +16,10 @@ type Props = {
   enemyWinning: null | string;
   playerScore: number;
   enemyScore: number;
-  firstPlayerWon: null | boolean;
+  firstPlayerWon: boolean;
   choice: null | Choice;
   handleChoice: (item: Choice) => void;
-  // handleRestart: () => void;
+  handleRestart: () => void;
 };
 
 export const Game: React.FC<Props> = ({
@@ -34,7 +34,7 @@ export const Game: React.FC<Props> = ({
   firstPlayerWon,
   choice,
   handleChoice,
-  // handleRestart,
+  handleRestart,
 }) => {
   return (
     <div
@@ -60,14 +60,14 @@ export const Game: React.FC<Props> = ({
         <div className="player">
           <span className={classNames('dot', { connected: playerOneStatus })} />
           <span className="subtitle" id="player-1-tag">
-            {playerId === 1 ? 'You (Player 1)' : 'Enemy (Player 2)'}
+            {playerId === 1 ? 'You (Player 1)' : 'Enemy (Player 1)'}
           </span>
         </div>
 
         <div className="player">
           <span className={classNames('dot', { connected: playerTwoStatus })} />
           <span className="subtitle" id="player-2-tag">
-            {playerId === 1 ? 'Enemy (Player 2)' : 'You (Player 1)'}
+            {playerId === 1 ? 'Enemy (Player 2)' : 'You (Player 2)'}
           </span>
         </div>
       </div>
@@ -102,13 +102,13 @@ export const Game: React.FC<Props> = ({
         <span className="tag is-link is-normal">
           You:
           <span id="my-score" style={{ marginLeft: '5px' }}>
-            {playerScore}
+            {playerId === 1 ? playerScore : enemyScore}
           </span>
         </span>
         <span className="tag is-link is-normal">
           Enemy:
           <span id="enemy-score" style={{ marginLeft: '5px' }}>
-            {enemyScore}
+            {playerId === 1 ? enemyScore : playerScore}
           </span>
         </span>
       </div>
@@ -118,21 +118,13 @@ export const Game: React.FC<Props> = ({
       )}
       >
         <p>
-          {playerId}
-          <br />
-          {playerWinning}
-          <br />
-          {enemyWinning}
-          <br />
-          {firstPlayerWon && 33}
-          <br />
           {firstPlayerWon
             ? (playerId === 1 ? playerWinning : enemyWinning)
             : (playerId === 2 ? playerWinning : enemyWinning)}
         </p>
       </div>
 
-      {/* {winning
+      {playerWinning && enemyWinning
         && (
           <button
             type="submit"
@@ -141,7 +133,7 @@ export const Game: React.FC<Props> = ({
           >
             Restart
           </button>
-        )} */}
+        )}
     </div>
   );
 };

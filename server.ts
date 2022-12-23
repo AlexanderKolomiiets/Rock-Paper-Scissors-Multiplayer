@@ -95,24 +95,20 @@ io.on('connection', (socket) => {
 
       if (playerOneChoice === playerTwoChoice) {
         io.to(roomId).emit('draw', 'It`s draw');
+      } else if (winCombinations[playerOneChoice] === playerTwoChoice) {
+        io.to(roomId).emit('player_1_wins',
+          { playerOneChoice, playerTwoChoice });
       } else {
-        let enemyChoice = '';
-
-        if (playerId === 1) {
-          enemyChoice = playerTwoChoice;
-        } else {
-          enemyChoice = playerOneChoice;
-        }
-
-        if (winCombinations[playerOneChoice] === playerTwoChoice) {
-          io.to(roomId).emit('player_1_wins', { playerChoice, enemyChoice });
-        } else {
-          io.to(roomId).emit('player_2_wins', { playerChoice, enemyChoice });
-        }
+        io.to(roomId).emit('player_2_wins',
+          { playerTwoChoice, playerOneChoice });
       }
 
       choices[roomId] = ['', ''];
     }
+  });
+
+  socket.on('restart', (roomId) => {
+    io.to(roomId).emit('restart');
   });
 
   socket.on('disconnect', () => {
