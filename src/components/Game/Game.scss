@@ -1,3 +1,8 @@
+.choices {
+  display: flex;
+  justify-content: center;
+}
+
 .choice {
   cursor: pointer;
   transition: 0.2s transform;

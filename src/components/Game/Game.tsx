@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import 'bulma/css/bulma.min.css';
 import './Game.scss';
 import classNames from 'classnames';
@@ -11,11 +12,14 @@ type Props = {
   playerOneStatus: boolean;
   playerTwoStatus: boolean;
   waiting: boolean;
+  playerWinning: null | string;
+  enemyWinning: null | string;
   playerScore: number;
   enemyScore: number;
-  winning: null | string;
+  firstPlayerWon: null | boolean;
   choice: null | Choice;
   handleChoice: (item: Choice) => void;
+  // handleRestart: () => void;
 };
 
 export const Game: React.FC<Props> = ({
@@ -25,9 +29,12 @@ export const Game: React.FC<Props> = ({
   waiting,
   playerScore,
   enemyScore,
-  winning,
+  playerWinning,
+  enemyWinning,
+  firstPlayerWon,
   choice,
   handleChoice,
+  // handleRestart,
 }) => {
   return (
     <div
@@ -106,9 +113,35 @@ export const Game: React.FC<Props> = ({
         </span>
       </div>
 
-      <div className={classNames('title', { 'is-hidden': !winning })}>
-        <p>{winning}</p>
+      <div className={classNames(
+        'title', { 'is-hidden': !playerWinning && !enemyWinning },
+      )}
+      >
+        <p>
+          {playerId}
+          <br />
+          {playerWinning}
+          <br />
+          {enemyWinning}
+          <br />
+          {firstPlayerWon && 33}
+          <br />
+          {firstPlayerWon
+            ? (playerId === 1 ? playerWinning : enemyWinning)
+            : (playerId === 2 ? playerWinning : enemyWinning)}
+        </p>
       </div>
+
+      {/* {winning
+        && (
+          <button
+            type="submit"
+            className="button is-link"
+            onClick={handleRestart}
+          >
+            Restart
+          </button>
+        )} */}
     </div>
   );
 };

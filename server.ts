@@ -48,6 +48,8 @@ io.on('connection', (socket) => {
   socket.on('join_room', (roomId) => {
     if (!rooms[roomId]) {
       socket.emit('show_error', Error.NotExist);
+    } else if (rooms[roomId][1] !== '') {
+      socket.emit('show_error', Error.Full);
     } else {
       userConnected(socket.id);
       joinRoom(roomId, socket.id);
@@ -90,8 +92,6 @@ io.on('connection', (socket) => {
     if (choices[roomId][0] !== '' && choices[roomId][1] !== '') {
       const playerOneChoice = choices[roomId][0];
       const playerTwoChoice = choices[roomId][1];
-
-      console.log(choices);
 
       if (playerOneChoice === playerTwoChoice) {
         io.to(roomId).emit('draw', 'It`s draw');

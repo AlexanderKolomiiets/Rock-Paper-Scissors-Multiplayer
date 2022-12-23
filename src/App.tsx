@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import {
   Routes,
@@ -20,27 +21,24 @@ function App() {
   const [playerTwoStatus, setPlayerTwoStatus] = useState(false);
   const [choice, setChoice] = useState<null | Choice>(null);
   const [waiting, setWaiting] = useState(true);
-  const [winning, setWinning] = useState<null | string>(null);
+  const [playerWinning, setPlayerWinning] = useState<null | string>(null);
+  const [enemyWinning, setEnemyWinning] = useState<null | string>(null);
   const [roomId, setRoomId] = useState(0);
   const [canChoose, setCanChoose] = useState(false);
   const [playerScore, setPlayerScore] = useState(0);
   const [enemyScore, setEnemyScore] = useState(0);
+  const [firstPlayerWon, setFirstPlayerWon] = useState<null | boolean>(null);
   const [error, setError] = useState<null | Error>(null);
 
   const navigate = useNavigate();
 
-  const handlePlayerJoined = (id: number) => {
-    if (id === 1) {
-      setPlayerOneStatus(true);
-    } else {
-      setPlayerTwoStatus(true);
-    }
-  };
-
   const handleChoice = (item: Choice) => {
     if (canChoose && playerOneStatus && playerTwoStatus) {
+      const playerChoice = item;
+
       setChoice(item);
-      socket.emit('choose', { playerId, choice, roomId });
+      socket.emit('choose', { playerId, playerChoice, roomId });
+      setCanChoose(false);
     }
   };
 
@@ -59,6 +57,11 @@ function App() {
     socket.emit('join_random_room');
   };
 
+  // const handleRestart = () => {
+  //   setWinning(null);
+  //   setCanChoose(true);
+  // };
+
   useEffect(() => {
     socket.on('show_error', (err) => {
       setError(err);
@@ -75,7 +78,7 @@ function App() {
     socket.on('room_joined', (id) => {
       setPlayerId(2);
       setRoomId(id);
-      handlePlayerJoined(1);
+      setPlayerOneStatus(true);
       if (!error) {
         navigate('/game');
       }
@@ -84,11 +87,11 @@ function App() {
     });
 
     socket.on('player_1_connected', () => {
-      handlePlayerJoined(1);
+      setPlayerOneStatus(true);
     });
 
     socket.on('player_2_connected', () => {
-      handlePlayerJoined(2);
+      setPlayerTwoStatus(true);
       setCanChoose(true);
       setWaiting(false);
     });
@@ -112,27 +115,19 @@ function App() {
     });
 
     socket.on('draw', (message: string) => {
-      setWinning(message);
+      setPlayerWinning(message);
     });
 
     socket.on('player_1_wins', ({ playerChoice, enemyChoice }) => {
-      if (playerId === 1) {
-        setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you won )`);
-        setPlayerScore(prev => prev + 1);
-      } else {
-        setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you lost (`);
-        setEnemyScore(prev => prev + 1);
-      }
+      setFirstPlayerWon(true);
+      setPlayerWinning(`You chose ${playerChoice} and your opponent chose ${enemyChoice}, so you won1 )`);
+      setEnemyWinning(`You chose ${enemyChoice} and your opponent chose ${playerChoice}, so you lost1 (`);
     });
 
     socket.on('player_2_wins', ({ playerChoice, enemyChoice }) => {
-      if (playerId === 2) {
-        setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you won )`);
-        setPlayerScore(prev => prev + 1);
-      } else {
-        setWinning(`You chose ${playerChoice} and you opponent chose ${enemyChoice}, so you lost (`);
-        setEnemyScore(prev => prev + 1);
-      }
+      setFirstPlayerWon(false);
+      setPlayerWinning(`You chose ${playerChoice} and your opponent chose ${enemyChoice}, so you won2 )`);
+      setEnemyWinning(`You chose ${enemyChoice} and your opponent chose ${playerChoice}, so you lost2 (`);
     });
   }, []);
 
@@ -159,15 +154,18 @@ function App() {
               playerOneStatus={playerOneStatus}
               playerTwoStatus={playerTwoStatus}
               waiting={waiting}
-              winning={winning}
+              playerWinning={playerWinning}
+              enemyWinning={enemyWinning}
               playerScore={playerScore}
               enemyScore={enemyScore}
+              firstPlayerWon={firstPlayerWon}
               choice={choice}
               handleChoice={handleChoice}
+              // handleRestart={handleRestart}
             />
           )}
         />
-        <Route path="*" element={<h1>Page not found</h1>} />
+        <Route path="*" element={<h1>{playerId}</h1>} />
       </Routes>
     </div>
   );
