@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/paper-rock-scissors-multiplayer/static/css/main.b585bb3c.css",
+    "main.js": "/paper-rock-scissors-multiplayer/static/js/main.81f8816d.js",
+    "static/media/scissors.png": "/paper-rock-scissors-multiplayer/static/media/scissors.9a3cd87a7c6c8caac5ca.png",
+    "static/media/paper.png": "/paper-rock-scissors-multiplayer/static/media/paper.4fff6897bd235d79cf02.png",
+    "static/media/rock.png": "/paper-rock-scissors-multiplayer/static/media/rock.1a7386eb3a5a36fe7806.png",
+    "index.html": "/paper-rock-scissors-multiplayer/index.html",
+    "main.b585bb3c.css.map": "/paper-rock-scissors-multiplayer/static/css/main.b585bb3c.css.map",
+    "main.81f8816d.js.map": "/paper-rock-scissors-multiplayer/static/js/main.81f8816d.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b585bb3c.css",
+    "static/js/main.81f8816d.js"
+  ]
+}
