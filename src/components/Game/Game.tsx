@@ -11,15 +11,17 @@ type Props = {
   playerId: number;
   playerOneStatus: boolean;
   playerTwoStatus: boolean;
+  playerOneName: string;
+  playerTwoName: string;
   waiting: boolean;
   playerWinning: null | string;
   enemyWinning: null | string;
   playerScore: number;
   enemyScore: number;
   firstPlayerWon: boolean;
-  choice: null | Choice;
   playerOneChose: boolean;
   playerTwoChose: boolean;
+  choice: null | Choice;
   handleChoice: (item: Choice) => void;
   handleRestart: () => void;
 };
@@ -28,15 +30,17 @@ export const Game: React.FC<Props> = ({
   playerId,
   playerOneStatus,
   playerTwoStatus,
+  playerOneName,
+  playerTwoName,
   waiting,
-  playerScore,
-  enemyScore,
   playerWinning,
   enemyWinning,
+  playerScore,
+  enemyScore,
   firstPlayerWon,
-  choice,
   playerOneChose,
   playerTwoChose,
+  choice,
   handleChoice,
   handleRestart,
 }) => {
@@ -61,18 +65,18 @@ export const Game: React.FC<Props> = ({
         </p>
       </div>
 
-      <div className="block block-row" id="players">
+      <div className="block-row block" id="players">
         <div id="player-1">
           <span className={classNames('dot', { connected: playerOneStatus })} />
           <span className="subtitle">
-            {playerId === 1 ? 'You (Player 1)' : 'Enemy (Player 1)'}
+            {playerId === 1 ? `You (${playerOneName || 'Player 1'})` : `Enemy (${playerOneName || 'Player 1'})`}
           </span>
         </div>
 
         <div id="player-2">
           <span className={classNames('dot', { connected: playerTwoStatus })} />
           <span className="subtitle">
-            {playerId === 1 ? 'Enemy (Player 2)' : 'You (Player 2)'}
+            {playerId === 1 ? `Enemy (${playerTwoName || 'Player 2'})` : `You (${playerTwoName || 'Player 2'})`}
           </span>
         </div>
       </div>
@@ -103,7 +107,7 @@ export const Game: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="block-row" id="score">
+      <div className="block-row block" id="score">
         <span className="tag is-link is-normal">
           You:
           <span id="my-score" style={{ marginLeft: '5px' }}>

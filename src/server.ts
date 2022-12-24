@@ -4,21 +4,22 @@ import http from 'http';
 import path from 'path';
 import cors from 'cors';
 import { Server } from 'socket.io';
-import { Error } from './types/Error';
 import {
   rooms,
-  createRoom,
-  joinRoom,
   exitRoom,
-} from './utils/rooms';
+} from '../utils/rooms';
 import {
   connectedUsers,
   choices,
   winCombinations,
   initializeChoices,
-  userConnected,
   makeMove,
-} from './utils/users';
+} from '../utils/users';
+import {
+  create,
+  join,
+  joinRandom,
+} from './controllers/roomsController';
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -33,58 +34,11 @@ const io = new Server(server, {
 });
 
 io.on('connection', (socket) => {
-  socket.on('create_room', (roomId) => {
-    if (rooms[roomId]) {
-      socket.emit('show_error', Error.Exist);
-    } else {
-      userConnected(socket.id);
-      createRoom(roomId, socket.id);
-      socket.emit('room_created', roomId);
-      socket.emit('player_1_connected');
-      socket.join(roomId);
-    }
-  });
+  socket.on('create_room', create);
 
-  socket.on('join_room', (roomId) => {
-    if (!rooms[roomId]) {
-      socket.emit('show_error', Error.NotExist);
-    } else if (rooms[roomId][1] !== '') {
-      socket.emit('show_error', Error.Full);
-    } else {
-      userConnected(socket.id);
-      joinRoom(roomId, socket.id);
-      socket.join(roomId);
+  socket.on('join_room', join);
 
-      socket.emit('room_joined', roomId);
-      socket.emit('player_2_connected');
-      socket.broadcast.to(roomId).emit('player_2_connected');
-      initializeChoices(roomId);
-    }
-  });
-
-  socket.on('join_random_room', () => {
-    let roomId = '';
-
-    for (const id in rooms) {
-      if (rooms[id][1] === '') {
-        roomId = id;
-        break;
-      }
-    }
-
-    if (roomId === '') {
-      socket.emit('show_error', Error.Full);
-    } else {
-      userConnected(socket.id);
-      joinRoom(roomId, socket.id);
-      socket.join(roomId);
-
-      socket.emit('room_joined', roomId);
-      socket.emit('player_2_connected');
-      socket.broadcast.to(roomId).emit('player_2_connected');
-      initializeChoices(roomId);
-    }
-  });
+  socket.on('join_random_room', joinRandom);
 
   socket.on('choose', ({ playerId, playerChoice, roomId }) => {
     makeMove(roomId, playerId, playerChoice);
@@ -149,5 +103,3 @@ server.listen(`${PORT}`, () => {
   // eslint-disable-next-line no-console
   console.log(`Server started on port: ${PORT}`);
 });
-
-export {};

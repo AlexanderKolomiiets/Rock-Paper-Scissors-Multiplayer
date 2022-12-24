@@ -1,10 +1,9 @@
-/* eslint-disable quote-props */
 export const connectedUsers: any = {};
 export const choices: any = {};
 export const winCombinations: any = {
-  'rock': 'scissors',
-  'paper': 'rock',
-  'scissors': 'paper',
+  rock: 'scissors',
+  paper: 'rock',
+  scissors: 'paper',
 };
 
 export const initializeChoices = (roomId: string) => {

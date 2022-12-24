@@ -1,5 +1,5 @@
 import 'bulma/css/bulma.min.css';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import classNames from 'classnames';
 import { Error } from '../../../types/Error';
 
@@ -8,6 +8,10 @@ type Props = {
   handleCreateRoom: (value: string) => void;
   handleJoinRoom: (value: string) => void;
   handleJoinRandomRoom: () => void;
+  playerOneName: string;
+  playerTwoName: string
+  setPlayerOneName: (value: string) => void;
+  setPlayerTwoName: (value: string) => void;
 };
 
 export const Menu: React.FC<Props> = ({
@@ -15,6 +19,10 @@ export const Menu: React.FC<Props> = ({
   handleCreateRoom,
   handleJoinRoom,
   handleJoinRandomRoom,
+  playerOneName,
+  playerTwoName,
+  setPlayerOneName,
+  setPlayerTwoName,
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [createInput, setCreateInput] = useState('');
@@ -24,12 +32,20 @@ export const Menu: React.FC<Props> = ({
     setSelected(section);
   };
 
-  const handleCreateInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCreateInput = (event: ChangeEvent<HTMLInputElement>) => {
     setCreateInput(event.target.value);
   };
 
-  const handleJoinInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleJoinInput = (event: ChangeEvent<HTMLInputElement>) => {
     setJoinInput(event.target.value);
+  };
+
+  const handlePlayerOneName = (event: ChangeEvent<HTMLInputElement>) => {
+    setPlayerOneName(event.target.value);
+  };
+
+  const handlePlayerTwoName = (event: ChangeEvent<HTMLInputElement>) => {
+    setPlayerTwoName(event.target.value);
   };
 
   const mainMenuStyles = {
@@ -81,6 +97,14 @@ export const Menu: React.FC<Props> = ({
             value={createInput}
             onChange={handleCreateInput}
           />
+          <input
+            type="text"
+            placeholder="Enter you nickname"
+            className="input"
+            style={{ marginBottom: '30px' }}
+            value={playerOneName}
+            onChange={handlePlayerOneName}
+          />
           <div style={mainMenuStyles}>
             <button
               type="submit"
@@ -112,6 +136,13 @@ export const Menu: React.FC<Props> = ({
             placeholder="Enter a name of the room"
             value={joinInput}
             onChange={handleJoinInput}
+          />
+          <input
+            type="text"
+            placeholder="Enter you nickname"
+            className="input"
+            value={playerTwoName}
+            onChange={handlePlayerTwoName}
           />
           <div style={mainMenuStyles}>
             <button

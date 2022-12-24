@@ -12,17 +12,20 @@ import './App.scss';
 import Menu from './components/Menu';
 import Game from './components/Game';
 
-const socket = io('http://localhost:3001');
+const PORT = process.env.PORT || 3001;
+const socket = io(`http://localhost:${PORT}`);
 
 function App() {
   const [playerId, setPlayerId] = useState(0);
+  const [roomId, setRoomId] = useState(0);
   const [playerOneStatus, setPlayerOneStatus] = useState(false);
   const [playerTwoStatus, setPlayerTwoStatus] = useState(false);
-  const [choice, setChoice] = useState<null | Choice>(null);
+  const [playerOneName, setPlayerOneName] = useState('');
+  const [playerTwoName, setPlayerTwoName] = useState('');
   const [waiting, setWaiting] = useState(true);
   const [playerWinning, setPlayerWinning] = useState<null | string>(null);
   const [enemyWinning, setEnemyWinning] = useState<null | string>(null);
-  const [roomId, setRoomId] = useState(0);
+  const [choice, setChoice] = useState<null | Choice>(null);
   const [canChoose, setCanChoose] = useState(false);
   const [playerScore, setPlayerScore] = useState(0);
   const [enemyScore, setEnemyScore] = useState(0);
@@ -81,8 +84,6 @@ function App() {
       if (!error) {
         navigate('/game');
       }
-
-      setWaiting(false);
     });
 
     socket.on('player_1_connected', () => {
@@ -99,7 +100,7 @@ function App() {
       setCanChoose(false);
       setPlayerOneStatus(false);
       setPlayerTwoStatus(false);
-      navigate('/home');
+      navigate('/');
       setPlayerScore(0);
       setEnemyScore(0);
       setWaiting(true);
@@ -133,19 +134,20 @@ function App() {
 
     socket.on('draw', (message: string) => {
       setPlayerWinning(message);
+      setEnemyWinning(message);
     });
 
     socket.on('player_1_wins', ({ playerOneChoice, playerTwoChoice }) => {
       setFirstPlayerWon(true);
-      setPlayerWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you won1 )`);
-      setEnemyWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you lost1 (`);
+      setPlayerWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you won )`);
+      setEnemyWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you lost (`);
       setPlayerScore(prev => prev + 1);
     });
 
     socket.on('player_2_wins', ({ playerOneChoice, playerTwoChoice }) => {
       setFirstPlayerWon(false);
-      setPlayerWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you won2 )`);
-      setEnemyWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you lost2 (`);
+      setPlayerWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you won )`);
+      setEnemyWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you lost (`);
       setEnemyScore(prev => prev + 1);
     });
 
@@ -155,6 +157,22 @@ function App() {
       setChoice(null);
       setCanChoose(true);
     });
+
+    return () => {
+      socket.off('show_error');
+      socket.off('room_created');
+      socket.off('room_joined');
+      socket.off('player_1_connected');
+      socket.off('player_2_connected');
+      socket.off('player_1_disconnected');
+      socket.off('player_2_disconnected');
+      socket.off('player_chose');
+      socket.off('lock_choice');
+      socket.off('draw');
+      socket.off('player_1_wins');
+      socket.off('player_2_wins');
+      socket.off('restart');
+    };
   }, []);
 
   return (
@@ -168,6 +186,10 @@ function App() {
               handleCreateRoom={handleCreateRoom}
               handleJoinRoom={handleJoinRoom}
               handleJoinRandomRoom={handleJoinRandomRoom}
+              playerOneName={playerOneName}
+              playerTwoName={playerTwoName}
+              setPlayerOneName={setPlayerOneName}
+              setPlayerTwoName={setPlayerTwoName}
             />
           )}
         />
@@ -179,15 +201,17 @@ function App() {
               playerId={playerId}
               playerOneStatus={playerOneStatus}
               playerTwoStatus={playerTwoStatus}
+              playerOneName={playerOneName}
+              playerTwoName={playerTwoName}
               waiting={waiting}
               playerWinning={playerWinning}
               enemyWinning={enemyWinning}
               playerScore={playerScore}
               enemyScore={enemyScore}
               firstPlayerWon={firstPlayerWon}
-              choice={choice}
               playerOneChose={playerOneChose}
               playerTwoChose={playerTwoChose}
+              choice={choice}
               handleChoice={handleChoice}
               handleRestart={handleRestart}
             />
