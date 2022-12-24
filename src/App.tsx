@@ -12,8 +12,7 @@ import './App.scss';
 import Menu from './components/Menu';
 import Game from './components/Game';
 
-const PORT = process.env.PORT || 3001;
-const socket = io(`http://localhost:${PORT}`);
+const socket = io('https://rock-paper-scissors-multiplayer.onrender.com');
 
 function App() {
   const [playerId, setPlayerId] = useState(0);

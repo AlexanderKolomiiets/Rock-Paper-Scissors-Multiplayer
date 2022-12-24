@@ -22,15 +22,16 @@ import {
 } from './controllers/roomsController';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
-
 const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:3000' },
+  cors: {
+    origin:
+    'https://alexanderkolomiiets.github.io/Rock-Paper-Scissors-Multiplayer/',
+  },
 });
 
 io.on('connection', (socket) => {
@@ -99,7 +100,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(`${PORT}`, () => {
+server.listen(() => {
   // eslint-disable-next-line no-console
-  console.log(`Server started on port: ${PORT}`);
+  console.log('Server is running...');
 });
