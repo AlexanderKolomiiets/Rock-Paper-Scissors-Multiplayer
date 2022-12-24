@@ -88,6 +88,7 @@ io.on('connection', (socket) => {
 
   socket.on('choose', ({ playerId, playerChoice, roomId }) => {
     makeMove(roomId, playerId, playerChoice);
+    io.to(roomId).emit('player_chose', playerId);
 
     if (choices[roomId][0] !== '' && choices[roomId][1] !== '') {
       const playerOneChoice = choices[roomId][0];
@@ -103,7 +104,9 @@ io.on('connection', (socket) => {
           { playerTwoChoice, playerOneChoice });
       }
 
-      choices[roomId] = ['', ''];
+      io.to(roomId).emit('lock_choice');
+
+      initializeChoices(roomId);
     }
   });
 

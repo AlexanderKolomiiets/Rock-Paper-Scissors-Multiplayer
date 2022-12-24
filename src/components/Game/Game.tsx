@@ -18,6 +18,8 @@ type Props = {
   enemyScore: number;
   firstPlayerWon: boolean;
   choice: null | Choice;
+  playerOneChose: boolean;
+  playerTwoChose: boolean;
   handleChoice: (item: Choice) => void;
   handleRestart: () => void;
 };
@@ -33,46 +35,49 @@ export const Game: React.FC<Props> = ({
   enemyWinning,
   firstPlayerWon,
   choice,
+  playerOneChose,
+  playerTwoChose,
   handleChoice,
   handleRestart,
 }) => {
   return (
     <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        gap: '20px',
-      }}
+      className="block-row"
+      style={{ flexDirection: 'column' }}
     >
       <div className={classNames('title', { 'is-hidden': !waiting })}>
         <p>Waiting for another player to join...</p>
       </div>
 
-      <div
-        className="block"
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          gap: '20px',
-        }}
+      <div className={classNames('subtitle',
+        {
+          'is-hidden': (playerId === 1 && !playerTwoChose)
+      || (playerId === 2 && !playerOneChose)
+      || !playerId,
+        })}
       >
-        <div className="player">
+        <p>
+          Opponent made a choice
+        </p>
+      </div>
+
+      <div className="block block-row" id="players">
+        <div id="player-1">
           <span className={classNames('dot', { connected: playerOneStatus })} />
-          <span className="subtitle" id="player-1-tag">
+          <span className="subtitle">
             {playerId === 1 ? 'You (Player 1)' : 'Enemy (Player 1)'}
           </span>
         </div>
 
-        <div className="player">
+        <div id="player-2">
           <span className={classNames('dot', { connected: playerTwoStatus })} />
-          <span className="subtitle" id="player-2-tag">
+          <span className="subtitle">
             {playerId === 1 ? 'Enemy (Player 2)' : 'You (Player 2)'}
           </span>
         </div>
       </div>
 
-      <div className="choices block" style={{ display: 'flex', gap: '20px' }}>
+      <div className="block-row block" id="choices">
         <div
           className={classNames('choice', { selected: choice === 'rock' })}
           onClick={() => handleChoice('rock')}
@@ -98,7 +103,7 @@ export const Game: React.FC<Props> = ({
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '20px' }}>
+      <div className="block-row" id="score">
         <span className="tag is-link is-normal">
           You:
           <span id="my-score" style={{ marginLeft: '5px' }}>
@@ -120,7 +125,7 @@ export const Game: React.FC<Props> = ({
         <p>
           {firstPlayerWon
             ? (playerId === 1 ? playerWinning : enemyWinning)
-            : (playerId === 2 ? playerWinning : enemyWinning)}
+            : (playerId === 1 ? enemyWinning : playerWinning)}
         </p>
       </div>
 

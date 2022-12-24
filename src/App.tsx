@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { useState, useEffect } from 'react';
 import {
   Routes,
@@ -28,6 +27,8 @@ function App() {
   const [playerScore, setPlayerScore] = useState(0);
   const [enemyScore, setEnemyScore] = useState(0);
   const [firstPlayerWon, setFirstPlayerWon] = useState(false);
+  const [playerOneChose, setPlayerOneChose] = useState(false);
+  const [playerTwoChose, setPlayerTwoChose] = useState(false);
   const [error, setError] = useState<null | Error>(null);
 
   const navigate = useNavigate();
@@ -102,6 +103,7 @@ function App() {
       setPlayerScore(0);
       setEnemyScore(0);
       setWaiting(true);
+      setPlayerTwoChose(false);
     });
 
     socket.on('player_2_disconnected', () => {
@@ -112,6 +114,21 @@ function App() {
       setEnemyScore(0);
       setPlayerWinning('');
       setEnemyWinning('');
+      setPlayerOneChose(false);
+    });
+
+    socket.on('player_chose', (id) => {
+      if (id === 1) {
+        setPlayerOneChose(true);
+      } else {
+        setPlayerTwoChose(true);
+      }
+    });
+
+    socket.on('lock_choice', () => {
+      setCanChoose(false);
+      setPlayerOneChose(false);
+      setPlayerTwoChose(false);
     });
 
     socket.on('draw', (message: string) => {
@@ -123,7 +140,6 @@ function App() {
       setPlayerWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you won1 )`);
       setEnemyWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you lost1 (`);
       setPlayerScore(prev => prev + 1);
-      setCanChoose(false);
     });
 
     socket.on('player_2_wins', ({ playerOneChoice, playerTwoChoice }) => {
@@ -131,7 +147,6 @@ function App() {
       setPlayerWinning(`You chose ${playerTwoChoice} and your opponent chose ${playerOneChoice}, so you won2 )`);
       setEnemyWinning(`You chose ${playerOneChoice} and your opponent chose ${playerTwoChoice}, so you lost2 (`);
       setEnemyScore(prev => prev + 1);
-      setCanChoose(false);
     });
 
     socket.on('restart', () => {
@@ -171,6 +186,8 @@ function App() {
               enemyScore={enemyScore}
               firstPlayerWon={firstPlayerWon}
               choice={choice}
+              playerOneChose={playerOneChose}
+              playerTwoChose={playerTwoChose}
               handleChoice={handleChoice}
               handleRestart={handleRestart}
             />

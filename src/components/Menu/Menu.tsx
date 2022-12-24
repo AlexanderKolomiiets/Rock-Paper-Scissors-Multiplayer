@@ -32,7 +32,7 @@ export const Menu: React.FC<Props> = ({
     setJoinInput(event.target.value);
   };
 
-  const buttonLayoutStyles = {
+  const mainMenuStyles = {
     display: 'flex',
     gap: '30px',
     justifyContent: 'center',
@@ -53,7 +53,7 @@ export const Menu: React.FC<Props> = ({
       <h1 className="title is-3">Rock Paper Scissors</h1>
 
       {!selected && (
-        <div style={buttonLayoutStyles}>
+        <div style={mainMenuStyles}>
           <button
             type="submit"
             className="button is-primary"
@@ -81,7 +81,7 @@ export const Menu: React.FC<Props> = ({
             value={createInput}
             onChange={handleCreateInput}
           />
-          <div style={buttonLayoutStyles}>
+          <div style={mainMenuStyles}>
             <button
               type="submit"
               className="button is-primary"
@@ -113,7 +113,7 @@ export const Menu: React.FC<Props> = ({
             value={joinInput}
             onChange={handleJoinInput}
           />
-          <div style={buttonLayoutStyles}>
+          <div style={mainMenuStyles}>
             <button
               type="submit"
               className="button is-primary"
