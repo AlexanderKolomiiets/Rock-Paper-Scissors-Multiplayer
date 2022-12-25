@@ -30,7 +30,10 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
 const io = new Server(server, {
-  cors: { origin: 'http://localhost:3000' },
+  cors: {
+    origin:
+    'https://alexanderkolomiiets.github.io/Rock-Paper-Scissors-Multiplayer/',
+  },
 });
 
 io.on('connection', (socket) => {
