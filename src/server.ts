@@ -27,7 +27,12 @@ const server = http.createServer(app);
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin:
+    'https://rock-paper-scissors-4tfc.onrender.com',
+  },
+});
 
 io.on('connection', (socket) => {
   socket.on('create_room', create);
