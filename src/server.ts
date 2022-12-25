@@ -29,8 +29,7 @@ app.use(express.static(path.join(__dirname, 'src')));
 
 const io = new Server(server, {
   cors: {
-    origin:
-    'https://rock-paper-scissors-4tfc.onrender.com',
+    origin: '*',
   },
 });
 
