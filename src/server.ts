@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'src')));
 const io = new Server(server, {
   cors: {
     origin: '*',
+    credentials: true,
   },
 });
 
