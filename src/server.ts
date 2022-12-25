@@ -27,12 +27,7 @@ const server = http.createServer(app);
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
-const io = new Server(server, {
-  cors: {
-    origin:
-    'https://alexanderkolomiiets.github.io/Rock-Paper-Scissors-Multiplayer/',
-  },
-});
+const io = new Server(server);
 
 io.on('connection', (socket) => {
   socket.on('create_room', create);

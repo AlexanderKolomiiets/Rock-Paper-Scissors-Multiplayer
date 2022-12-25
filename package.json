@@ -1,7 +1,7 @@
 {
   "name": "rock-paper-scissors",
   "version": "0.1.0",
-  "homepage": "https://alexanderkolomiiets.github.io/paper-rock-scissors-multiplayer",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@mate-academy/students-ts-config": "0.0.4",
