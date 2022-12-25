@@ -5,13 +5,9 @@ import { Error } from '../../../types/Error';
 
 type Props = {
   error: Error | null;
-  handleCreateRoom: (value: string) => void;
-  handleJoinRoom: (value: string) => void;
-  handleJoinRandomRoom: () => void;
-  playerOneName: string;
-  playerTwoName: string
-  setPlayerOneName: (value: string) => void;
-  setPlayerTwoName: (value: string) => void;
+  handleCreateRoom: (value: string, name: string) => void;
+  handleJoinRoom: (value: string, name: string) => void;
+  handleJoinRandomRoom: (name: string) => void;
 };
 
 export const Menu: React.FC<Props> = ({
@@ -19,14 +15,12 @@ export const Menu: React.FC<Props> = ({
   handleCreateRoom,
   handleJoinRoom,
   handleJoinRandomRoom,
-  playerOneName,
-  playerTwoName,
-  setPlayerOneName,
-  setPlayerTwoName,
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [createInput, setCreateInput] = useState('');
   const [joinInput, setJoinInput] = useState('');
+  const [playerOneName, setPlayerOneName] = useState('');
+  const [playerTwoName, setPlayerTwoName] = useState('');
 
   const handleSelect = (section: string | null) => {
     setSelected(section);
@@ -110,8 +104,11 @@ export const Menu: React.FC<Props> = ({
               type="submit"
               className="button is-primary"
               onClick={() => {
-                handleCreateRoom(createInput);
-                setCreateInput('');
+                if (createInput && playerOneName) {
+                  handleCreateRoom(createInput, playerOneName);
+                  setCreateInput('');
+                  setPlayerOneName('');
+                }
               }}
             >
               Create
@@ -149,8 +146,11 @@ export const Menu: React.FC<Props> = ({
               type="submit"
               className="button is-primary"
               onClick={() => {
-                handleJoinRoom(joinInput);
-                setJoinInput('');
+                if (joinInput && playerTwoName) {
+                  handleJoinRoom(joinInput, playerTwoName);
+                  setJoinInput('');
+                  setPlayerTwoName('');
+                }
               }}
             >
               Join
@@ -168,7 +168,11 @@ export const Menu: React.FC<Props> = ({
           <button
             type="submit"
             className="button is-primary"
-            onClick={() => handleJoinRandomRoom()}
+            onClick={() => {
+              if (playerTwoName) {
+                handleJoinRandomRoom(playerTwoName);
+              }
+            }}
           >
             Join Random
           </button>

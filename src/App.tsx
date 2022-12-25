@@ -12,8 +12,7 @@ import './App.scss';
 import Menu from './components/Menu';
 import Game from './components/Game';
 
-const socket = io('https://rock-paper-scissors-multiplayer.onrender.com',
-  { transports: ['websocket', 'polling', 'flashsocket'] });
+const socket = io('http://localhost:3001');
 
 function App() {
   const [playerId, setPlayerId] = useState(0);
@@ -45,19 +44,19 @@ function App() {
     }
   };
 
-  const handleCreateRoom = (id: string) => {
+  const handleCreateRoom = (id: string, name: string) => {
     setError(null);
-    socket.emit('create_room', id);
+    socket.emit('create_room', id, name);
   };
 
-  const handleJoinRoom = (id: string) => {
+  const handleJoinRoom = (id: string, name: string) => {
     setError(null);
-    socket.emit('join_room', id);
+    socket.emit('join_room', id, name);
   };
 
-  const handleJoinRandomRoom = () => {
+  const handleJoinRandomRoom = (name: string) => {
     setError(null);
-    socket.emit('join_random_room');
+    socket.emit('join_random_room', name);
   };
 
   const handleRestart = () => {
@@ -86,6 +85,14 @@ function App() {
       }
     });
 
+    socket.on('player_1_name', (name: string) => {
+      setPlayerOneName(name);
+    });
+
+    socket.on('player_2_name', (name: string) => {
+      setPlayerTwoName(name);
+    });
+
     socket.on('player_1_connected', () => {
       setPlayerOneStatus(true);
     });
@@ -104,7 +111,11 @@ function App() {
       setPlayerScore(0);
       setEnemyScore(0);
       setWaiting(true);
+      setPlayerWinning('');
+      setEnemyWinning('');
       setPlayerTwoChose(false);
+      setPlayerTwoName('');
+      setPlayerOneName('');
     });
 
     socket.on('player_2_disconnected', () => {
@@ -116,6 +127,7 @@ function App() {
       setPlayerWinning('');
       setEnemyWinning('');
       setPlayerOneChose(false);
+      setPlayerTwoName('');
     });
 
     socket.on('player_chose', (id) => {
@@ -186,10 +198,6 @@ function App() {
               handleCreateRoom={handleCreateRoom}
               handleJoinRoom={handleJoinRoom}
               handleJoinRandomRoom={handleJoinRandomRoom}
-              playerOneName={playerOneName}
-              playerTwoName={playerTwoName}
-              setPlayerOneName={setPlayerOneName}
-              setPlayerTwoName={setPlayerTwoName}
             />
           )}
         />

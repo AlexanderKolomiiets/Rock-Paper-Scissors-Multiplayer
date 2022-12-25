@@ -11,7 +11,7 @@ import {
 } from '../../utils/users';
 import { Error } from '../../types/Error';
 
-export function create(this: Socket, roomId: string) {
+export function create(this: Socket, roomId: string, name: string) {
   if (rooms[roomId]) {
     this.emit('show_error', Error.Exist);
   } else {
@@ -19,11 +19,12 @@ export function create(this: Socket, roomId: string) {
     createRoom(roomId, this.id);
     this.emit('room_created', roomId);
     this.emit('player_1_connected');
+    this.emit('player_1_name', name);
     this.join(roomId);
   }
 }
 
-export function join(this: Socket, roomId: string) {
+export function join(this: Socket, roomId: string, name: string) {
   if (!rooms[roomId]) {
     this.emit('show_error', Error.NotExist);
   } else if (rooms[roomId][1] !== '') {
@@ -35,12 +36,14 @@ export function join(this: Socket, roomId: string) {
 
     this.emit('room_joined', roomId);
     this.emit('player_2_connected');
+    this.emit('player_2_name', name);
     this.broadcast.to(roomId).emit('player_2_connected');
+    this.broadcast.to(roomId).emit('player_2_name', name);
     initializeChoices(roomId);
   }
 }
 
-export function joinRandom(this: Socket) {
+export function joinRandom(this: Socket, name: string) {
   let roomId = '';
 
   for (const id in rooms) {
@@ -59,7 +62,9 @@ export function joinRandom(this: Socket) {
 
     this.emit('room_joined', roomId);
     this.emit('player_2_connected');
+    this.emit('player_2_name', name);
     this.broadcast.to(roomId).emit('player_2_connected');
+    this.broadcast.to(roomId).emit('player_2_name', name);
     initializeChoices(roomId);
   }
 }

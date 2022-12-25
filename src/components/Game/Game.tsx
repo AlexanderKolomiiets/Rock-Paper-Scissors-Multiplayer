@@ -69,14 +69,14 @@ export const Game: React.FC<Props> = ({
         <div id="player-1">
           <span className={classNames('dot', { connected: playerOneStatus })} />
           <span className="subtitle">
-            {playerId === 1 ? `You (${playerOneName || 'Player 1'})` : `Enemy (${playerOneName || 'Player 1'})`}
+            {playerId === 1 ? `You (${playerOneName})` : `Enemy (${playerOneName})`}
           </span>
         </div>
 
         <div id="player-2">
           <span className={classNames('dot', { connected: playerTwoStatus })} />
           <span className="subtitle">
-            {playerId === 1 ? `Enemy (${playerTwoName || 'Player 2'})` : `You (${playerTwoName || 'Player 2'})`}
+            {playerId === 1 ? `Enemy (${playerTwoName})` : `You (${playerTwoName})`}
           </span>
         </div>
       </div>
