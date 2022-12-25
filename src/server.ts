@@ -22,16 +22,15 @@ import {
 } from './controllers/roomsController';
 
 const app = express();
+const PORT = process.env.PORT || 3001;
+
 const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'src')));
 
 const io = new Server(server, {
-  cors: {
-    origin: '*',
-    credentials: true,
-  },
+  cors: { origin: 'http://localhost:3000' },
 });
 
 io.on('connection', (socket) => {
@@ -100,7 +99,7 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(() => {
+server.listen(`${PORT}`, () => {
   // eslint-disable-next-line no-console
-  console.log('Server is running...');
+  console.log(`Server started on port: ${PORT}`);
 });
