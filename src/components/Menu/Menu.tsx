@@ -1,5 +1,5 @@
 import 'bulma/css/bulma.min.css';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { Error } from '../../../types/Error';
 
@@ -8,6 +8,7 @@ type Props = {
   handleCreateRoom: (value: string, name: string) => void;
   handleJoinRoom: (value: string, name: string) => void;
   handleJoinRandomRoom: (name: string) => void;
+  playerId: number;
 };
 
 export const Menu: React.FC<Props> = ({
@@ -15,12 +16,23 @@ export const Menu: React.FC<Props> = ({
   handleCreateRoom,
   handleJoinRoom,
   handleJoinRandomRoom,
+  playerId,
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [createInput, setCreateInput] = useState('');
   const [joinInput, setJoinInput] = useState('');
   const [playerOneName, setPlayerOneName] = useState('');
   const [playerTwoName, setPlayerTwoName] = useState('');
+
+  useEffect(() => {
+    if (playerId === 1) {
+      setPlayerOneName(JSON.parse(localStorage.getItem('playerOneName')
+      || '[]'));
+    } else {
+      setPlayerTwoName(JSON.parse(localStorage.getItem('playerTwoName')
+      || '[]'));
+    }
+  }, []);
 
   const handleSelect = (section: string | null) => {
     setSelected(section);
@@ -106,6 +118,9 @@ export const Menu: React.FC<Props> = ({
               onClick={() => {
                 if (createInput && playerOneName) {
                   handleCreateRoom(createInput, playerOneName);
+                  localStorage.setItem(
+                    'playerOneName', JSON.stringify(playerOneName),
+                  );
                   setCreateInput('');
                   setPlayerOneName('');
                 }
@@ -148,6 +163,9 @@ export const Menu: React.FC<Props> = ({
               onClick={() => {
                 if (joinInput && playerTwoName) {
                   handleJoinRoom(joinInput, playerTwoName);
+                  localStorage.setItem(
+                    'playerTwoName', JSON.stringify(playerTwoName),
+                  );
                   setJoinInput('');
                   setPlayerTwoName('');
                 }
@@ -171,6 +189,10 @@ export const Menu: React.FC<Props> = ({
             onClick={() => {
               if (playerTwoName) {
                 handleJoinRandomRoom(playerTwoName);
+                localStorage.setItem(
+                  'playerTwoName', JSON.stringify(playerTwoName),
+                );
+                setPlayerTwoName('');
               }
             }}
           >

@@ -12,7 +12,8 @@ import './App.scss';
 import Menu from './components/Menu';
 import Game from './components/Game';
 
-const socket = io('http://localhost:3001');
+const socket = io('https://rock-paper-scissors-multiplayer.onrender.com',
+  { transports: ['websocket', 'polling', 'flashsocket'] });
 
 function App() {
   const [playerId, setPlayerId] = useState(0);
@@ -174,6 +175,8 @@ function App() {
       socket.off('show_error');
       socket.off('room_created');
       socket.off('room_joined');
+      socket.off('player_1_name');
+      socket.off('player_2_name');
       socket.off('player_1_connected');
       socket.off('player_2_connected');
       socket.off('player_1_disconnected');
@@ -198,6 +201,7 @@ function App() {
               handleCreateRoom={handleCreateRoom}
               handleJoinRoom={handleJoinRoom}
               handleJoinRandomRoom={handleJoinRandomRoom}
+              playerId={playerId}
             />
           )}
         />
