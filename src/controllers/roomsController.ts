@@ -18,8 +18,7 @@ export function create(this: Socket, roomId: string, name: string) {
     userConnected(this.id);
     createRoom(roomId, this.id);
     this.emit('room_created', roomId);
-    this.emit('player_1_connected');
-    this.emit('player_1_name', name);
+    this.emit('player_1_connected', name);
     this.join(roomId);
   }
 }
@@ -35,10 +34,8 @@ export function join(this: Socket, roomId: string, name: string) {
     this.join(roomId);
 
     this.emit('room_joined', roomId);
-    this.emit('player_2_connected');
-    this.emit('player_2_name', name);
-    this.broadcast.to(roomId).emit('player_2_connected');
-    this.broadcast.to(roomId).emit('player_2_name', name);
+    this.emit('player_2_connected', name);
+    this.broadcast.to(roomId).emit('player_2_connected', name);
     initializeChoices(roomId);
   }
 }
@@ -61,10 +58,8 @@ export function joinRandom(this: Socket, name: string) {
     this.join(roomId);
 
     this.emit('room_joined', roomId);
-    this.emit('player_2_connected');
-    this.emit('player_2_name', name);
-    this.broadcast.to(roomId).emit('player_2_connected');
-    this.broadcast.to(roomId).emit('player_2_name', name);
+    this.emit('player_2_connected', name);
+    this.broadcast.to(roomId).emit('player_2_connected', name);
     initializeChoices(roomId);
   }
 }

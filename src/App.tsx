@@ -86,19 +86,13 @@ function App() {
       }
     });
 
-    socket.on('player_1_name', (name: string) => {
+    socket.on('player_1_connected', (name: string) => {
       setPlayerOneName(name);
-    });
-
-    socket.on('player_2_name', (name: string) => {
-      setPlayerTwoName(name);
-    });
-
-    socket.on('player_1_connected', () => {
       setPlayerOneStatus(true);
     });
 
-    socket.on('player_2_connected', () => {
+    socket.on('player_2_connected', (name: string) => {
+      setPlayerTwoName(name);
       setPlayerTwoStatus(true);
       setCanChoose(true);
       setWaiting(false);
