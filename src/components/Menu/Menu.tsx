@@ -49,6 +49,39 @@ export const Menu: React.FC<Props> = ({
     setPlayerTwoName(event.target.value);
   };
 
+  const handleSubmitCreate = () => {
+    if (createInput && playerOneName) {
+      handleCreateRoom(createInput, playerOneName);
+      localStorage.setItem(
+        'playerOneName', JSON.stringify(playerOneName),
+      );
+      setCreateInput('');
+      setPlayerOneName('');
+    }
+  };
+
+  const handleSubmitJoin = () => {
+    if (joinInput && playerTwoName) {
+      handleJoinRoom(joinInput, playerTwoName);
+      localStorage.setItem(
+        'playerTwoName', JSON.stringify(playerTwoName),
+      );
+      setJoinInput('');
+      setPlayerTwoName('');
+    }
+  };
+
+  const handleSubmitJoinRandom = () => {
+    if (playerTwoName) {
+      handleJoinRandomRoom(playerTwoName);
+      localStorage.setItem(
+        'playerTwoName', JSON.stringify(playerTwoName),
+      );
+      setJoinInput('');
+      setPlayerTwoName('');
+    }
+  };
+
   const mainMenuStyles = {
     display: 'flex',
     gap: '30px',
@@ -110,16 +143,7 @@ export const Menu: React.FC<Props> = ({
             <button
               type="submit"
               className="button is-primary"
-              onClick={() => {
-                if (createInput && playerOneName) {
-                  handleCreateRoom(createInput, playerOneName);
-                  localStorage.setItem(
-                    'playerOneName', JSON.stringify(playerOneName),
-                  );
-                  setCreateInput('');
-                  setPlayerOneName('');
-                }
-              }}
+              onClick={handleSubmitCreate}
             >
               Create
             </button>
@@ -155,16 +179,7 @@ export const Menu: React.FC<Props> = ({
             <button
               type="submit"
               className="button is-primary"
-              onClick={() => {
-                if (joinInput && playerTwoName) {
-                  handleJoinRoom(joinInput, playerTwoName);
-                  localStorage.setItem(
-                    'playerTwoName', JSON.stringify(playerTwoName),
-                  );
-                  setJoinInput('');
-                  setPlayerTwoName('');
-                }
-              }}
+              onClick={handleSubmitJoin}
             >
               Join
             </button>
@@ -181,15 +196,7 @@ export const Menu: React.FC<Props> = ({
           <button
             type="submit"
             className="button is-primary"
-            onClick={() => {
-              if (playerTwoName) {
-                handleJoinRandomRoom(playerTwoName);
-                localStorage.setItem(
-                  'playerTwoName', JSON.stringify(playerTwoName),
-                );
-                setPlayerTwoName('');
-              }
-            }}
+            onClick={handleSubmitJoinRandom}
           >
             Join Random
           </button>
