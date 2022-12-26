@@ -32,7 +32,7 @@ app.use(express.static(path.join(__dirname, 'src')));
 const io = new Server(server, {
   cors: {
     origin:
-    'https://alexanderkolomiiets.github.io',
+    'http://localhost:3000',
   },
 });
 

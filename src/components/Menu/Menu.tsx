@@ -8,7 +8,6 @@ type Props = {
   handleCreateRoom: (value: string, name: string) => void;
   handleJoinRoom: (value: string, name: string) => void;
   handleJoinRandomRoom: (name: string) => void;
-  playerId: number;
 };
 
 export const Menu: React.FC<Props> = ({
@@ -16,7 +15,6 @@ export const Menu: React.FC<Props> = ({
   handleCreateRoom,
   handleJoinRoom,
   handleJoinRandomRoom,
-  playerId,
 }) => {
   const [selected, setSelected] = useState<string | null>(null);
   const [createInput, setCreateInput] = useState('');
@@ -25,13 +23,10 @@ export const Menu: React.FC<Props> = ({
   const [playerTwoName, setPlayerTwoName] = useState('');
 
   useEffect(() => {
-    if (playerId === 1) {
-      setPlayerOneName(JSON.parse(localStorage.getItem('playerOneName')
+    setPlayerOneName(JSON.parse(localStorage.getItem('playerOneName')
       || '[]'));
-    } else {
-      setPlayerTwoName(JSON.parse(localStorage.getItem('playerTwoName')
+    setPlayerTwoName(JSON.parse(localStorage.getItem('playerTwoName')
       || '[]'));
-    }
   }, []);
 
   const handleSelect = (section: string | null) => {
